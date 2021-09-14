@@ -402,49 +402,49 @@ def zwaveEvent(physicalgraph.zwave.commands.centralscenev1.CentralSceneNotificat
 
 def tapUp1Response(String buttonType) {
     sendEvent(name: "status" , value: "Tap Up")
-	[name: "button", value: "pushed", data: [buttonNumber: "7"], descriptionText: "$device.displayName Tap-Up-1 (button 7) pressed", 
+	[name: "button", value: "up", data: [buttonNumber: "1"], descriptionText: "$device.displayName Tap-Up-1 (button 7) pressed", 
        isStateChange: true, type: "$buttonType"]
 }
 
 def tapDown1Response(String buttonType) {
     sendEvent(name: "status" , value: "Tap Down")
-	[name: "button", value: "pushed", data: [buttonNumber: "8"], descriptionText: "$device.displayName Tap-Down-1 (button 8) pressed", 
+	[name: "button", value: "down", data: [buttonNumber: "1"], descriptionText: "$device.displayName Tap-Down-1 (button 8) pressed", 
       isStateChange: true, type: "$buttonType"]
 }
 
 def tapUp2Response(String buttonType) {
     sendEvent(name: "status" , value: "Tap Up x2")
-	[name: "button", value: "pushed", data: [buttonNumber: "1"], descriptionText: "$device.displayName Tap-Up-2 (button 1) pressed", 
+	[name: "button", value: "up_2x", data: [buttonNumber: "1"], descriptionText: "$device.displayName Tap-Up-2 (button 1) pressed", 
        isStateChange: true, type: "$buttonType"]
 }
 
 def tapDown2Response(String buttonType) {
     sendEvent(name: "status" , value: "Tap Down x2")
-	[name: "button", value: "pushed", data: [buttonNumber: "2"], descriptionText: "$device.displayName Tap-Down-2 (button 2) pressed", 
+	[name: "button", value: "down_2x", data: [buttonNumber: "1"], descriptionText: "$device.displayName Tap-Down-2 (button 2) pressed", 
       isStateChange: true, type: "$buttonType"]
 }
 
 def tapUp3Response(String buttonType) {
     sendEvent(name: "status" , value: "Tap Up x3")
-	[name: "button", value: "pushed", data: [buttonNumber: "3"], descriptionText: "$device.displayName Tap-Up-3 (button 3) pressed", 
+	[name: "button", value: "up_3x", data: [buttonNumber: "1"], descriptionText: "$device.displayName Tap-Up-3 (button 3) pressed", 
     isStateChange: true, type: "$buttonType"]
 }
 
 def tapDown3Response(String buttonType) {
     sendEvent(name: "status" , value: "Tap Down x3")
-	[name: "button", value: "pushed", data: [buttonNumber: "4"], descriptionText: "$device.displayName Tap-Down-3 (button 4) pressed", 
+	[name: "button", value: "down_3x", data: [buttonNumber: "1"], descriptionText: "$device.displayName Tap-Down-3 (button 4) pressed", 
     isStateChange: true, type: "$buttonType"]
 }
 
 def holdUpResponse(String buttonType) {
     sendEvent(name: "status" , value: "Hold Up")
-	[name: "button", value: "pushed", data: [buttonNumber: "5"], descriptionText: "$device.displayName Hold-Up (button 5) pressed", 
+	[name: "button", value: "up_hold", data: [buttonNumber: "1"], descriptionText: "$device.displayName Hold-Up (button 5) pressed", 
     isStateChange: true, type: "$buttonType"]
 }
 
 def holdDownResponse(String buttonType) {
     sendEvent(name: "status" , value: "Hold Down")
-	[name: "button", value: "pushed", data: [buttonNumber: "6"], descriptionText: "$device.displayName Hold-Down (button 6) pressed", 
+	[name: "button", value: "down_hold", data: [buttonNumber: "1"], descriptionText: "$device.displayName Hold-Down (button 6) pressed", 
     isStateChange: true, type: "$buttonType"]
 }
 
@@ -489,10 +489,17 @@ def setFirmwareVersion() {
    sendEvent(name: "firmwareVersion",  value: versionInfo, isStateChange: true, displayed: false)
 }
 
+private getSupportedButtonValues() {
+   def values = ["pushed", "held", "up", "up_hold", "up_2x", "up_3x", "down", "down_hold", "down_2x", "down_3x"]
+   log.debug ("getSupportedButtonValues() called")
+   return values
+}
+
 def configure() {
    log.debug ("configure() called")
  
-   sendEvent(name: "numberOfButtons", value: 8, displayed: false)
+   sendEvent(name: "numberOfButtons", value: 1, displayed: false)
+   sendEvent(name: "supportedButtonValues", value: supportedButtonValues.encodeAsJSON(), displayed: false)
    def commands = []
    commands << setDimRatePrefs()
    commands << zwave.switchMultilevelV1.switchMultilevelGet().format()
